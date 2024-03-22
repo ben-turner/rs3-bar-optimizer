@@ -18,7 +18,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ~/.cargo
+            ~/.cargo/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Install wasm-pack
@@ -27,8 +27,11 @@ jobs:
         run: wasm-pack build --target web
       - name: Package
         run: tar -czf gh_pages.tar.gz pkg index.html
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-pages
+          path: gh_pages.tar.gz
 
   deploy:
     needs: build
